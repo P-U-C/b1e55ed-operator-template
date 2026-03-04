@@ -16,7 +16,7 @@ Get from bare machine to a running b1e55ed instance with OpenClaw in under 30 mi
 ## Step 1 — Install OpenClaw
 
 ```bash
-curl -fsSL https://install.openclaw.ai | bash
+curl -fsSL https://get.openclaw.ai | bash
 ```
 
 Verify:
