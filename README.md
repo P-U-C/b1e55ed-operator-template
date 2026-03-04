@@ -77,7 +77,9 @@ b1e55ed resolve-outcomes
 | `BOOTSTRAP.md` | First-run onboarding flow; delete after completion |
 | `TASK_QUEUE.md` | Async queue model (enqueue fast, drain via cron) |
 | `scripts/enqueue-pending-reviews.sh` | Poll open PRs with `review/pending` and enqueue missing review tasks |
+| `scripts/setup-crons.sh` | Add system cron for outcome resolver (30min) |
 | `scripts/setup-openclaw.sh` | One-shot workspace install + queue-drain cron setup |
+| `scripts/verify-engine.sh` | Quick engine health check (API, producers, resolver, backlog) |
 | `.github/ISSUE_TEMPLATE/operator-issue.md` | Issue template for operator incident reporting |
 
 ---

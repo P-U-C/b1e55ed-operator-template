@@ -370,6 +370,28 @@ REPO="${REPO:-P-U-C/b1e55ed}" GH_TOKEN="${GH_TOKEN:?GH_TOKEN required}" \
 
 ---
 
+## Quick Reference — sqlite3 One-Liners
+
+For manual triage or when the full Python checks aren't needed:
+
+```bash
+DB="${DATABASE_URL:-$HOME/b1e55ed/data/brain.db}"
+
+# Producer health — last forecast per producer
+sqlite3 "$DB" "SELECT producer_id, datetime(MAX(ts), 'unixepoch') as last_seen FROM events WHERE type='FORECAST_V1' GROUP BY producer_id"
+
+# Outcome resolver health — last resolution timestamp
+sqlite3 "$DB" "SELECT datetime(MAX(resolved_at), 'unixepoch') as last_resolved FROM forecast_resolution_state"
+
+# Backlog count — unresolved forecasts
+sqlite3 "$DB" "SELECT COUNT(*) as unresolved FROM events e WHERE type='FORECAST_V1' AND NOT EXISTS (SELECT 1 FROM forecast_resolution_state r WHERE r.forecast_event_id = e.id)"
+
+# MetaProducer progress — outcomes toward 500 activation
+sqlite3 "$DB" "SELECT COUNT(*) as outcomes, ROUND(COUNT(*)*100.0/500,1) as pct_to_activation FROM events WHERE type='FORECAST_OUTCOME_V1'"
+```
+
+---
+
 ## Alert Thresholds (Canonical)
 
 - Producer silent >2h → 🚨 **ALERT**

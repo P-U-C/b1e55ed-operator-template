@@ -174,12 +174,19 @@ Drain cron ID placeholder (fill after setup):
 6. `b1e55ing` must be Codex-subagent execution from queue drain.
    - Not inline in the drain cron turn.
 
-7. Shell env scoping with pipes matters:
+7. b1e55ing commits on already-squash-merged branches are invisible.
+   - The branch is gone after squash-merge; pushing to it has no effect.
+   - Commit to `develop` via a PR instead.
+
+8. Branch protection blocks direct push to `develop` and `main`.
+   - Always go through a PR, even for trivial changes.
+
+9. Shell env scoping with pipes matters:
    - `BRANCH=x curl ... | bash` sets `BRANCH` for `curl`, not `bash`.
    - Use `curl ... | BRANCH=x bash` when `bash` needs the variable.
 
-8. macOS Forge binaries may require quarantine removal:
-   - `xattr -dr com.apple.quarantine <binary-or-dir>`
+10. macOS Forge binaries may require quarantine removal:
+    - `xattr -dr com.apple.quarantine <binary-or-dir>`
 
 ---
 
