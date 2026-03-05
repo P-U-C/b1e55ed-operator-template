@@ -34,33 +34,65 @@ Use this when:
 
 ---
 
-## 5-Minute Setup
+## Setup (5–10 min)
+
+### Step 1 — Install b1e55ed
 
 ```bash
-# 1) Clone your fork/template copy
-git clone https://github.com/<you>/b1e55ed-operator-template.git
-cd b1e55ed-operator-template
+curl -sSf https://raw.githubusercontent.com/P-U-C/b1e55ed/main/install.sh | BRANCH=develop bash
+```
 
-# 2) Set required env (add to shell profile or OpenClaw env)
-export GH_TOKEN="ghp_xxx"
-export REPO="P-U-C/b1e55ed"   # or your fork/repo
+### Step 2 — Connect a Telegram bot ⚠️ Do this before running setup {#step-2--connect-a-telegram-bot}
+
+You'll need a bot token for OpenClaw to send you alerts. Get one from [@BotFather](https://t.me/BotFather):
+
+```
+/newbot → follow prompts → copy the token (looks like 123456:ABC-xxx)
+```
+
+Keep it handy — setup will ask for it.
+
+### Step 3 — Set required env vars
+
+```bash
+export GH_TOKEN="ghp_xxx"        # GitHub PAT (scopes: repo, workflow, read:org)
+export REPO="P-U-C/b1e55ed"      # or your fork
 
 # Optional
 export DATABASE_URL="$HOME/b1e55ed/data/brain.db"
-export ALLORA_API_KEY=""
-export BINANCE_API_KEY=""
-
-# 3) Install template into OpenClaw workspace
-bash scripts/setup-openclaw.sh
-
-# 4) Start b1e55ed services
-b1e55ed start
-
-# 5) Run resolver once to validate path
-b1e55ed resolve-outcomes
 ```
 
+### Step 4 — Run setup
+
+```bash
+git clone https://github.com/<you>/b1e55ed-operator-template.git
+cd b1e55ed-operator-template
+bash scripts/setup-openclaw.sh
+```
+
+The script will:
+- prompt for your name, Telegram handle, timezone, GitHub username, and bot token
+- auto-detect your node ID from the installed CLI
+- write `USER.md` and `CRITICAL.md` with real values (not placeholders)
+- **install b1e55ed as a systemd service** (persistent across reboots, no screen needed)
+- set up the OpenClaw queue-drain cron
+
 > `setup-openclaw.sh` is non-destructive: it **does not overwrite** existing workspace files.
+
+### Step 5 — Forge your identity (if first time)
+
+```bash
+b1e55ed wizard
+```
+
+### Step 6 — Verify
+
+```bash
+sudo systemctl status b1e55ed    # engine running?
+curl -fsS http://localhost:5050/ && echo "API OK"
+b1e55ed resolve-outcomes         # resolver functional?
+openclaw cron list               # queue drain active?
+```
 
 ---
 
